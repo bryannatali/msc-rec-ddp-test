@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  # MongoDB Database (optional - comment out if using external MongoDB)
+  mongo:
+    image: mongo:7
+    container_name: ddp-test-mongo
+    restart: unless-stopped
+    volumes:
+      - mongodb_data:/data/db
+    ports:
+      - "27018:27017"  # Changed to 27018 to avoid conflict with existing MongoDB
+    networks:
+      - ddp-network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Meteor Application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ddp-test-app
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - ROOT_URL=http://localhost:3000
+      - MONGO_URL=mongodb://mongo:27017/ddp-test
+      - PORT=3000
+      - NODE_ENV=production
+    depends_on:
+      mongo:
+        condition: service_healthy
+    networks:
+      - ddp-network
+    volumes:
+      - ./test-results:/app/test-results
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+networks:
+  ddp-network:
+    driver: bridge
+
+volumes:
+  mongodb_data:
+    driver: local
+

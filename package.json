@@ -5,7 +5,14 @@
     "start": "meteor run",
     "test": "meteor test --once --driver-package meteortesting:mocha",
     "test-app": "TEST_WATCH=1 meteor test --full-app --driver-package meteortesting:mocha",
-    "visualize": "meteor --production --extra-packages bundle-visualizer"
+    "visualize": "meteor --production --extra-packages bundle-visualizer",
+    "docker:build": "docker-compose build",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "docker:logs": "docker-compose logs -f",
+    "docker:dev": "docker-compose -f docker-compose.dev.yml up",
+    "docker:external": "docker-compose -f docker-compose.external-mongo.yml up -d",
+    "docker:external:down": "docker-compose -f docker-compose.external-mongo.yml down"
   },
   "dependencies": {
     "@babel/runtime": "^7.23.5",
