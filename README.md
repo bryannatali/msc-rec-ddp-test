@@ -64,6 +64,12 @@ node load-test.js --clients 10,50
 # Custom test duration (in milliseconds)
 node load-test.js --duration 30000
 
+# Test remote server
+node load-test.js --server http://192.168.1.100:3000
+
+# Combine options
+node load-test.js --server https://my-app.com --clients 10,50 --duration 30000
+
 # View help
 node load-test.js --help
 ```

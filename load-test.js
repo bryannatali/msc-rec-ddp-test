@@ -27,19 +27,28 @@ DDP Performance Load Test Orchestrator
 Usage: node load-test.js [options]
 
 Options:
+  --server <url>       Server URL to test (default: http://localhost:3000)
   --clients <N>        Test with specific client count (comma-separated for multiple)
   --duration <ms>      Test duration in milliseconds (default: 60000)
   --help, -h           Show this help message
 
 Examples:
-  node load-test.js                          # Run all tests (10, 50, 100, 500)
-  node load-test.js --clients 10,50          # Run only 10 and 50 clients
-  node load-test.js --duration 30000         # Run with 30 second duration
+  node load-test.js                                    # Run all tests (10, 50, 100, 500)
+  node load-test.js --clients 10,50                    # Run only 10 and 50 clients
+  node load-test.js --duration 30000                   # Run with 30 second duration
+  node load-test.js --server http://192.168.1.100:3000 # Test remote server
+  node load-test.js --server https://my-app.com        # Test production server
   `);
   process.exit(0);
 }
 
 // Override config from CLI args
+const serverArg = args.indexOf("--server");
+if (serverArg !== -1 && args[serverArg + 1]) {
+  CONFIG.serverUrl = args[serverArg + 1];
+  console.log(`Using server: ${CONFIG.serverUrl}`);
+}
+
 const clientsArg = args.indexOf("--clients");
 if (clientsArg !== -1 && args[clientsArg + 1]) {
   CONFIG.clientCounts = args[clientsArg + 1]
@@ -144,10 +153,15 @@ async function runTest(clientCount) {
       try {
         const page = await browser.newPage();
 
-        // Suppress console logs from pages (optional)
+        // Suppress console logs from pages (filter out HMR websocket errors)
         page.on("console", (msg) => {
           if (msg.type() === "error") {
-            console.error(`Page ${i} error:`, msg.text());
+            const text = msg.text();
+            // Ignore HMR websocket errors (harmless in test mode)
+            if (text.includes("__meteor__hmr__") || text.includes("sockjs")) {
+              return;
+            }
+            console.error(`Page ${i} error:`, text);
           }
         });
 

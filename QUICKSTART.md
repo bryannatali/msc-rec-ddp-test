@@ -58,6 +58,12 @@ node load-test.js --clients 10,50
 # Run shorter tests (30 seconds each)
 node load-test.js --duration 30000
 
+# Test remote server
+node load-test.js --server http://your-server:3000
+
+# Combine options
+node load-test.js --server https://my-app.com --clients 10,50 --duration 30000
+
 # View all options
 node load-test.js --help
 

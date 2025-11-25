@@ -205,12 +205,14 @@ node load-test.js --clients 10,50,100,500
 ### From Local Machine
 
 ```bash
-# Update testConfig.js or load-test.js to point to your server
-# In imports/config/testConfig.js:
-serverUrl: 'http://your-server-ip:3000'
+# Test remote server by specifying the URL
+node load-test.js --server http://your-server-ip:3000
 
-# Run tests
-node load-test.js
+# Or with domain
+node load-test.js --server https://your-domain.com
+
+# With custom options
+node load-test.js --server http://192.168.1.100:3000 --clients 10,50 --duration 30000
 ```
 
 ## Monitoring
