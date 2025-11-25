@@ -37,13 +37,20 @@ docker-compose -f docker-compose.external-mongo.yml down
 
 ### Development Mode
 
-```bash
-# Run in development mode with hot reload
-docker-compose -f docker-compose.dev.yml up
+For development, run **only MongoDB** in Docker and Meteor on your local machine:
 
-# Stop
+```bash
+# Start MongoDB
+docker-compose -f docker-compose.dev.yml up -d
+
+# In another terminal, start Meteor
+npm start
+
+# Stop MongoDB when done
 docker-compose -f docker-compose.dev.yml down
 ```
+
+See [DEV_SETUP.md](./DEV_SETUP.md) for complete development guide.
 
 ## Production Deployment
 

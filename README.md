@@ -14,15 +14,20 @@ A comprehensive performance testing and analysis tool for Meteor.js DDP (Distrib
 
 ## Installation
 
-1. Install dependencies:
+### Development Setup
+
+1. Start MongoDB in Docker:
 ```bash
-npm install
+docker-compose -f docker-compose.dev.yml up -d
 ```
 
-2. Install Meteor packages:
+2. Install dependencies:
 ```bash
+npm install
 meteor npm install
 ```
+
+See [DEV_SETUP.md](./DEV_SETUP.md) for complete development guide.
 
 ## Usage
 

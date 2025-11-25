@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 # Development Docker Compose - runs Meteor in dev mode
 services:
@@ -10,7 +10,7 @@ services:
     volumes:
       - mongodb_data_dev:/data/db
     ports:
-      - "27017:27017"
+      - "27019:27017"
     networks:
       - ddp-network-dev
 
@@ -24,7 +24,7 @@ services:
       - "3000:3000"
     environment:
       - ROOT_URL=http://localhost:3000
-      - MONGO_URL=mongodb://mongo:27017/ddp-test
+      - MONGO_URL=mongodb://mongo:27019/ddp-test
       - METEOR_ALLOW_SUPERUSER=true
     depends_on:
       - mongo
@@ -42,4 +42,3 @@ networks:
 volumes:
   mongodb_data_dev:
     driver: local
-
