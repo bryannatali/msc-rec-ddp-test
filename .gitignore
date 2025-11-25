@@ -1,0 +1,5 @@
+node_modules/
+.meteor/local
+test-results/
+*.log
+.DS_Store
